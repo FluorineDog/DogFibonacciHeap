@@ -38,10 +38,11 @@ public:
 	void clear();
 	static double nega_inf;
 private:
-	static Iter add_to_child_list(Iter child, Iter node);
+	Iter add_to_root_list(Iter node);
+	static Iter adopt_child(Iter parent, Iter child);
 	static void merge_list(Iter list_a, Iter list_b);
 	void consolidate();
-	FiboHeapNode* root;	// point to child
+	FiboHeapNode* root;	//
 	int length;
 };
 #endif // !FIBONACCI_HEAP_H_

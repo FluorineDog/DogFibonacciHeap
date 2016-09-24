@@ -1,6 +1,7 @@
 #include "..\FibonacciHeap\fiboheap.h"
-#include "fibonacci_heap.h"
-#include "map"
+#include "fiboheap.h"
+#include <map>
+using std::swap;
 double FibonacciHeap::nega_inf = std::numeric_limits<double>::min();
 FibonacciHeap::FibonacciHeap()
 	:root(nullptr)
@@ -11,7 +12,7 @@ Iter FibonacciHeap::insert(double x)
 {
 	this->length++;
 	auto node = new FiboHeapNode(x);
-	add_to_child_list(root, node);
+	add_to_root_list(node);
 	if (!root || x < minimum()) {
 		root = node;
 	}
@@ -34,7 +35,6 @@ bool FibonacciHeap::extract_min()
 		while (child_iter->parent) {
 			// damn algorithm to keep parent
 			child_iter->parent = nullptr;
-			child_iter->mark = false;
 			child_iter = child_iter->next_node;
 		}
 		merge_list(root, min->child);
@@ -57,13 +57,9 @@ FibonacciHeap FibonacciHeap::merge(FibonacciHeap&& heap_a, FibonacciHeap&& heap_
 	FibonacciHeap heap;
 	// deal with empty heap
 	if (!heap_a.root) {
-		//heap.root = heap_b.root;
-		//heap.length = heap_b.length;
-		//heap_b.root = nullptr;
-		//heap_a.length = 0;
 		return std::move(heap_b);
 	}
-	else if(!heap_b.root){
+	else if (!heap_b.root) {
 		return std::move(heap_a);
 	}
 	merge_list(heap_a.root, heap_b.root);
@@ -72,7 +68,6 @@ FibonacciHeap FibonacciHeap::merge(FibonacciHeap&& heap_a, FibonacciHeap&& heap_
 
 void FibonacciHeap::decrease_key(Iter iter, double key)
 {
-
 }
 
 void FibonacciHeap::remove(Iter iter)
@@ -86,21 +81,37 @@ void FibonacciHeap::clear()
 	//do nothing until 
 }
 
-Iter FibonacciHeap::add_to_child_list(Iter child, Iter node)
+Iter FibonacciHeap::add_to_root_list(Iter node)
 {
+	if (root == nullptr) {
+		node->next_node = node;
+		node->prev_node = node;
+		root = node;
+		return node;
+	}
+	node->next_node = root->next_node;
+	node->prev_node = root;
+	node->next_node->prev_node = node;
+	node->prev_node->next_node = node;
+	node->parent = nullptr;
+	return node;
+}
+
+Iter FibonacciHeap::adopt_child(Iter parent, Iter node)
+{
+	Iter& child = parent->child;
 	if (child == nullptr) {
 		node->next_node = node;
 		node->prev_node = node;
-		if (child->parent) {
-			child->parent->degree++;
-		}
+		child = node;
+		return node;
 	}
 	node->next_node = child->next_node;
 	node->prev_node = child;
 	node->next_node->prev_node = node;
-	node->prev_node->next_node = child;
-	node->parent = child->parent;
-	
+	node->prev_node->next_node = node;
+	node->parent = parent;
+	return node;
 }
 
 void FibonacciHeap::merge_list(Iter list_a, Iter list_b)
@@ -119,12 +130,34 @@ void FibonacciHeap::merge_list(Iter list_a, Iter list_b)
 void FibonacciHeap::consolidate()
 {
 	Iter container[50] = {};
+	auto slot = [&](Iter cur)->Iter& {return container[cur->degree]; };
 	auto current = root;
 	Iter workload = nullptr;
-	while (true)
+	bool isFinished = false;
+	while (!isFinished)
 	{
-		if (workload) {
-			if(container[workload->degree])
+		if (slot(current) == nullptr) {
+			slot(current) = current;
+			current = current->next_node;
+			continue;
 		}
+		else if (slot(current) == current) {
+			break;
+		}
+		auto next = current->next_node;
+		isFinished = slot(next) == next;
+		while (slot(current)){
+			auto parent = slot(current);
+			slot(current) = nullptr;
+			if (current->data < parent->data) {
+				swap(parent, current);
+			}
+			current->next_node->prev_node = current->prev_node;
+			current->prev_node->next_node = current->next_node;
+			adopt_child(parent, current);
+			current = parent;
+		}
+		slot(current) = current;
+		current = next;
 	}
 }
