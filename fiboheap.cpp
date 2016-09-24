@@ -1,4 +1,3 @@
-#include "..\FibonacciHeap\fiboheap.h"
 #include "fiboheap.h"
 #include <map>
 using std::swap;
@@ -19,8 +18,7 @@ Iter FibonacciHeap::insert(double x)
 	return node;
 }
 
-double FibonacciHeap::minimum()
-{
+double FibonacciHeap::minimum() {
 	return root->data;
 }
 
@@ -64,10 +62,40 @@ FibonacciHeap FibonacciHeap::merge(FibonacciHeap&& heap_a, FibonacciHeap&& heap_
 	}
 	merge_list(heap_a.root, heap_b.root);
 	heap.root = heap_a.minimum() < heap_b.minimum() ? heap_a.root : heap_b.root;
+	return heap;
 }
 
 void FibonacciHeap::decrease_key(Iter iter, double key)
 {
+	Iter origin = iter;
+	if(iter->data < key){
+		return;
+	}
+	iter->data = key;
+	iter->mark = true;
+	while(iter->mark){
+		auto parent = iter->parent;
+		if(parent == nullptr){
+			break;
+		}
+
+		if(iter->next_node == iter){
+			parent->child = nullptr;
+		}
+		else {
+			parent->child = iter->next_node;
+			iter->next_node->prev_node = iter->prev_node;
+			iter->prev_node->next_node = iter->next_node;
+		}
+		parent->degree--;
+		iter->mark = false;
+		add_to_root_list(iter);
+		iter = parent;
+	}
+	iter->mark = true;
+	if(key < minimum()){
+		root = origin;
+	}
 }
 
 void FibonacciHeap::remove(Iter iter)
@@ -78,7 +106,7 @@ void FibonacciHeap::remove(Iter iter)
 
 void FibonacciHeap::clear()
 {
-	//do nothing until 
+	//do nothing until
 }
 
 Iter FibonacciHeap::add_to_root_list(Iter node)
@@ -104,14 +132,17 @@ Iter FibonacciHeap::adopt_child(Iter parent, Iter node)
 		node->next_node = node;
 		node->prev_node = node;
 		child = node;
-		return node;
 	}
-	node->next_node = child->next_node;
-	node->prev_node = child;
-	node->next_node->prev_node = node;
-	node->prev_node->next_node = node;
+	else{
+		node->next_node = child->next_node;
+		node->prev_node = child;
+		node->next_node->prev_node = node;
+		node->prev_node->next_node = node;
+	}
 	node->parent = parent;
+	parent->degree++;
 	return node;
+	
 }
 
 void FibonacciHeap::merge_list(Iter list_a, Iter list_b)
@@ -158,6 +189,9 @@ void FibonacciHeap::consolidate()
 			current = parent;
 		}
 		slot(current) = current;
+		if(current->data < root->data){
+			root = current;
+		}
 		current = next;
 	}
 }
