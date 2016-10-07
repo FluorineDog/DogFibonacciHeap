@@ -1,4 +1,0 @@
-/home/mike/workplace/Advanced_DataStructure/DogFibonacciHeap/CMakeFiles/rebuild_cache.dir
-/home/mike/workplace/Advanced_DataStructure/DogFibonacciHeap/CMakeFiles/edit_cache.dir
-/home/mike/workplace/Advanced_DataStructure/DogFibonacciHeap/CMakeFiles/tt.dir
-/home/mike/workplace/Advanced_DataStructure/DogFibonacciHeap/CMakeFiles/fibo.dir

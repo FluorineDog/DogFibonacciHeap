@@ -1,2 +1,0 @@
-/usr/bin/ar qc libFiboheap.a  CMakeFiles/Fiboheap.dir/fiboheap.cpp.o
-/usr/bin/ranlib libFiboheap.a
