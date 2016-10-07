@@ -1,0 +1,5 @@
+cmake_minimum_required (VERSION 2.6)
+project (tt)
+add_library(fibo fiboheap.cpp)
+add_executable(tt test.cpp)
+target_link_libraries(tt fibo)

@@ -1,0 +1,1 @@
+/usr/bin/c++      CMakeFiles/tt.dir/test.cpp.o  -o tt -rdynamic libfibo.a 

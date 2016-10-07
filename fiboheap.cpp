@@ -1,13 +1,13 @@
 #include "fiboheap.h"
 #include <map>
 using std::swap;
-double FibonacciHeap::nega_inf = std::numeric_limits<double>::min();
+T FibonacciHeap::nega_inf = std::numeric_limits<T>::min();
 FibonacciHeap::FibonacciHeap()
 	:root(nullptr)
 {
 }
 
-Iter FibonacciHeap::insert(double x)
+Iter FibonacciHeap::insert(T x)
 {
 	this->length++;
 	auto node = new FiboHeapNode(x);
@@ -18,7 +18,7 @@ Iter FibonacciHeap::insert(double x)
 	return node;
 }
 
-double FibonacciHeap::minimum() {
+T FibonacciHeap::minimum() {
 	return root->data;
 }
 
@@ -65,7 +65,7 @@ FibonacciHeap FibonacciHeap::merge(FibonacciHeap&& heap_a, FibonacciHeap&& heap_
 	return heap;
 }
 
-void FibonacciHeap::decrease_key(Iter iter, double key)
+void FibonacciHeap::decrease_key(Iter iter, T key)
 {
 	Iter origin = iter;
 	if(iter->data < key){

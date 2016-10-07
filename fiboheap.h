@@ -2,16 +2,17 @@
 #define FIBONACCI_HEAP_H_
 #include <algorithm>
 #include <limits>
+using T = long long;
 struct FiboHeapNode
 {
-	double data;
+	T data;
 	bool mark;
 	int degree;
 	FiboHeapNode* next_node;
 	FiboHeapNode* prev_node;
 	FiboHeapNode* child;
 	FiboHeapNode* parent;
-	FiboHeapNode(double data = 0) :
+	FiboHeapNode(T data = 0) :
 		data(data),
 		mark(false),
 		degree(0),
@@ -27,14 +28,14 @@ class FibonacciHeap
 public:
 	FibonacciHeap();
 	//~FibonacciHeap();	
-	Iter insert(double x);
-	double minimum();
+	Iter insert(T x);
+	T minimum();
 	bool extract_min();
 	static FibonacciHeap merge(FibonacciHeap&& heap_a, FibonacciHeap&& heap_b);
-	void decrease_key(Iter iter, double key);
+	void decrease_key(Iter iter, T key);
 	void remove(Iter iter);
 	void clear();
-	static double nega_inf;
+	static T nega_inf;
 private:
 	Iter add_to_root_list(Iter node);
 	static Iter adopt_child(Iter parent, Iter child);

@@ -1,0 +1,2 @@
+/usr/bin/ar qc libfibo.a  CMakeFiles/fibo.dir/fiboheap.cpp.o
+/usr/bin/ranlib libfibo.a
