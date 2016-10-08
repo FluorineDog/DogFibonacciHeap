@@ -6,12 +6,13 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"targetArchitecture": "x64",
-			"program": "${workspaceRoot}/a.out",
+			"program": "${workspaceRoot}/tt",
 			"args": [],
 			"stopAtEntry": false,
 			"cwd": "${workspaceRoot}",
 			"environment": [],
-			"externalConsole": true,
+			"externalConsole": false,
+			"preLaunchTask": "make",
 			"linux": {
 				"MIMode": "gdb"
 			},

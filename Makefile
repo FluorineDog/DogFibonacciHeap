@@ -56,17 +56,6 @@ CMAKE_BINARY_DIR = /home/mike/workplace/Advanced_DataStructure/DogFibonacciHeap
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
-
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
@@ -77,6 +66,17 @@ edit_cache:
 edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
+
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -136,6 +136,19 @@ fibo/fast:
 	$(MAKE) -f CMakeFiles/fibo.dir/build.make CMakeFiles/fibo.dir/build
 .PHONY : fibo/fast
 
+#=============================================================================
+# Target rules for targets named tt_bin
+
+# Build rule for target.
+tt_bin: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 tt_bin
+.PHONY : tt_bin
+
+# fast build rule for target.
+tt_bin/fast:
+	$(MAKE) -f CMakeFiles/tt_bin.dir/build.make CMakeFiles/tt_bin.dir/build
+.PHONY : tt_bin/fast
+
 fiboheap.o: fiboheap.cpp.o
 
 .PHONY : fiboheap.o
@@ -190,22 +203,53 @@ test.cpp.s:
 	$(MAKE) -f CMakeFiles/tt.dir/build.make CMakeFiles/tt.dir/test.cpp.s
 .PHONY : test.cpp.s
 
+test_bin.o: test_bin.cpp.o
+
+.PHONY : test_bin.o
+
+# target to build an object file
+test_bin.cpp.o:
+	$(MAKE) -f CMakeFiles/tt_bin.dir/build.make CMakeFiles/tt_bin.dir/test_bin.cpp.o
+.PHONY : test_bin.cpp.o
+
+test_bin.i: test_bin.cpp.i
+
+.PHONY : test_bin.i
+
+# target to preprocess a source file
+test_bin.cpp.i:
+	$(MAKE) -f CMakeFiles/tt_bin.dir/build.make CMakeFiles/tt_bin.dir/test_bin.cpp.i
+.PHONY : test_bin.cpp.i
+
+test_bin.s: test_bin.cpp.s
+
+.PHONY : test_bin.s
+
+# target to generate assembly for a file
+test_bin.cpp.s:
+	$(MAKE) -f CMakeFiles/tt_bin.dir/build.make CMakeFiles/tt_bin.dir/test_bin.cpp.s
+.PHONY : test_bin.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... tt"
 	@echo "... fibo"
+	@echo "... tt_bin"
+	@echo "... rebuild_cache"
 	@echo "... fiboheap.o"
 	@echo "... fiboheap.i"
 	@echo "... fiboheap.s"
 	@echo "... test.o"
 	@echo "... test.i"
 	@echo "... test.s"
+	@echo "... test_bin.o"
+	@echo "... test_bin.i"
+	@echo "... test_bin.s"
 .PHONY : help
 
 

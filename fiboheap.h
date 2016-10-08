@@ -36,6 +36,7 @@ public:
 	void remove(Iter iter);
 	void clear();
 	static T nega_inf;
+	bool examinate();
 private:
 	Iter add_to_root_list(Iter node);
 	static Iter adopt_child(Iter parent, Iter child);

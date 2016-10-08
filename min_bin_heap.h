@@ -18,7 +18,7 @@ public:
 		data.resize(size);
 		location.resize(size);
 		for(int i = 1; i < size; ++i){
-			data[i] = std::make_pair(e(), i);
+			data[i] = std::make_pair(e()%1000 + 10000, i);
 			location[i] = i;
 		}
 		make_heap();

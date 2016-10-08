@@ -1,5 +1,6 @@
 #include "fiboheap.h"
 #include <map>
+#include <assert.h>
 using std::swap;
 T FibonacciHeap::nega_inf = std::numeric_limits<T>::min();
 FibonacciHeap::FibonacciHeap()
@@ -27,7 +28,9 @@ bool FibonacciHeap::extract_min()
 	if (!root) {
 		return false;
 	}
+	length--;
 	auto min = root;
+	// if there are chlidren
 	if (min->child) {
 		auto child_iter = min->child;
 		while (child_iter->parent) {
@@ -47,6 +50,7 @@ bool FibonacciHeap::extract_min()
 		root = min->next_node;
 		consolidate();
 	}
+	min->data = nega_inf - 1;
 	return true;
 }
 
@@ -67,6 +71,9 @@ FibonacciHeap FibonacciHeap::merge(FibonacciHeap&& heap_a, FibonacciHeap&& heap_
 
 void FibonacciHeap::decrease_key(Iter iter, T key)
 {
+	if(iter->data == nega_inf -1){
+		return;
+	}
 	Iter origin = iter;
 	if(iter->data < key){
 		return;
@@ -78,7 +85,6 @@ void FibonacciHeap::decrease_key(Iter iter, T key)
 		if(parent == nullptr){
 			break;
 		}
-
 		if(iter->next_node == iter){
 			parent->child = nullptr;
 		}
@@ -163,7 +169,6 @@ void FibonacciHeap::consolidate()
 	Iter container[50] = {};
 	auto slot = [&](Iter cur)->Iter& {return container[cur->degree]; };
 	auto current = root;
-	Iter workload = nullptr;
 	bool isFinished = false;
 	while (!isFinished)
 	{
@@ -194,4 +199,40 @@ void FibonacciHeap::consolidate()
 		}
 		current = next;
 	}
+}
+static int count_node;
+bool check_node(FiboHeapNode* first_son, FiboHeapNode* parent){
+	count_node++;
+	auto cur = first_son;
+	int degree = parent->degree;
+	if(first_son == nullptr){
+		return degree == 0;
+	}
+	if(parent != first_son->parent){
+		return false;
+	}
+	do{
+		if(check_node(cur->child, cur) == false){
+			return false;
+		}
+		cur = cur->next_node;
+		degree--;
+	}while(cur != first_son);
+	return degree == 0;
+}
+#include <iostream>
+bool FibonacciHeap::examinate(){
+	count_node = 0;
+	static int unique = 0;
+	std::cerr <<"UNI"<< unique++<<"ID ";
+	auto cur = root;
+	if(root){
+		do{
+			if(check_node(cur->child, cur) == false){
+				return false;
+			}
+			cur = cur->next_node;
+		}while(cur != root);
+	}
+	return this->length == count_node;
 }
