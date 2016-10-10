@@ -2,7 +2,7 @@
 #include <vector>
 #include <random>
 //using namespace std;
-
+#include <iostream>
 using std::vector;
 using T = long long;
 using std::pair;
@@ -14,6 +14,7 @@ class BinaryHeap{
 public:
 	BinaryHeap(std::default_random_engine& e, int mysize) 
 	{
+		
 		size = mysize;
 		data.resize(size);
 		location.resize(size);
@@ -21,6 +22,8 @@ public:
 			data[i] = std::make_pair(e()%1000 + 10000, i);
 			location[i] = i;
 		}
+		data[0] = std::make_pair(2147483647, 0);
+		location[0] = 0;
 		make_heap();
 	}
 	
@@ -43,12 +46,23 @@ public:
 	}
 	
 	void extract_min(){
+		//std::cerr << "xxextract " << minimum() << " at " << std::endl;
+		//std::cerr << data[1].second<<"**";
+		//std::cerr<< data[1].first<<std::endl;
 		swap(data[1], data[size - 1]);
+		//std::cerr << data[size - 1].second<<"**";
+		//std::cerr<< data[size - 1].first<<std::endl;
 		--size;
+		location[data[size].second] = 0;
 		fixdown(1);
 	}
 
 	void decrease_key(int index, T new_data){
+		//std::cerr << "xxdecrease " << data[location[index]].first
+		//	<< " to " << new_data << " at " << index <<std::endl;
+		if(location[index] == 0){
+			return;
+		}
 		if(data[location[index]].first <= new_data){
 			return;
 		}

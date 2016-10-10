@@ -223,8 +223,8 @@ bool check_node(FiboHeapNode* first_son, FiboHeapNode* parent){
 #include <iostream>
 bool FibonacciHeap::examinate(){
 	count_node = 0;
-	static int unique = 0;
-	std::cerr <<"UNI"<< unique++<<"ID ";
+	//static int unique = 0;
+	//std::cerr <<"UNI"<< unique++<<"ID ";
 	auto cur = root;
 	if(root){
 		do{
